@@ -19,7 +19,7 @@ public class VentanaPaqueteria {
     private JButton totalPesoPorCiudadButton;
     private JList list1;
     private JButton modificarButton;
-    private JTextField textField3;
+    private JTextField modificartextField3;
     private JButton modificarEstadoButton;
 
     private Lista paquetes = new Lista();
@@ -74,8 +74,39 @@ public class VentanaPaqueteria {
                     comboBox1.setSelectedItem(pa.getCiudadEntrega());
                     comboBox2.setSelectedItem(pa.getCedulaReceptor());
                     textField1.setText(pa.getCedulaReceptor());
+
                 }
 
+            }
+        });
+        modificarEstadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String trackingText = modificartextField3.getText();
+                if (!trackingText.isEmpty()) {
+                    try {
+                        int trackingNumber = Integer.parseInt(trackingText);
+                        boolean paqueteEncontrado = false;
+                        for (Paqueteria paquete : paquetes.getServiEntrega()) {
+                            if (paquete.getTracking() == trackingNumber) {
+                                paquete.setEstado("No entregado");
+                                paqueteEncontrado = true;
+                                break;
+                            }
+                        }
+
+                        if (paqueteEncontrado) {
+                            list1.repaint();
+                            JOptionPane.showMessageDialog(null, "El estado del paquete ha sido modificado a 'No entregado'.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Paquete no encontrado.");
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Ingrese un número de tracking válido.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ingrese el número de tracking.");
+                }
             }
         });
     }
@@ -99,13 +130,13 @@ public class VentanaPaqueteria {
 
     }
 
-    public void llenarJlist(){
-        DefaultListModel dlm = new  DefaultListModel<>();
-        for (Paqueteria pa : paquetes.getServiEntrega()) {
-            dlm.addElement(pa);
+        public void llenarJlist(){
+            DefaultListModel dlm = new  DefaultListModel<>();
+            for (Paqueteria pa : paquetes.getServiEntrega()) {
+                dlm.addElement(pa);
+            }
+            list1.setModel(dlm);
         }
-        list1.setModel(dlm);
-    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("VentanaPaqueteria");
