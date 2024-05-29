@@ -3,6 +3,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VentanaPaqueteria {
     private JPanel Ventana;
@@ -21,6 +22,10 @@ public class VentanaPaqueteria {
     private JButton modificarButton;
     private JTextField modificartextField3;
     private JButton modificarEstadoButton;
+    private JButton ordenarPorBurbujaButton;
+    private JList list2;
+    private JList list3;
+    private JButton ordenarPorInsercionButton;
 
     private Lista paquetes = new Lista();
 
@@ -33,11 +38,17 @@ public class VentanaPaqueteria {
         agregarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    paquetes.adicionarElementos(new Paqueteria(Integer.parseInt(spinner1.getValue().toString()),Double.parseDouble(textField2.getText()),comboBox1.getSelectedItem().toString(), comboBox2.getSelectedItem().toString(), textField1.getText()));
+                try {
+                    paquetes.adicionarElementos(new Paqueteria(
+                            Integer.parseInt(spinner1.getValue().toString()),
+                            Double.parseDouble(textField2.getText()),
+                            comboBox1.getSelectedItem().toString(),
+                            comboBox2.getSelectedItem().toString(),
+                            textField1.getText()
+                    ));
                     JOptionPane.showMessageDialog(null, "Paquete agregado:");
                     System.out.println(paquetes.listarPaquetes());
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
                 setearDatos();
@@ -109,6 +120,12 @@ public class VentanaPaqueteria {
                 }
             }
         });
+        ordenarPorBurbujaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ordenarBurbuja();
+            }
+        });
     }
 
     public void setearDatos(){
@@ -130,13 +147,44 @@ public class VentanaPaqueteria {
 
     }
 
-        public void llenarJlist(){
-            DefaultListModel dlm = new  DefaultListModel<>();
-            for (Paqueteria pa : paquetes.getServiEntrega()) {
-                dlm.addElement(pa);
-            }
-            list1.setModel(dlm);
+    public void llenarJlist(){
+        DefaultListModel dl = new DefaultListModel<>();
+        for(Paqueteria p:paquetes.getServiEntrega()){
+            dl.addElement(p);
         }
+        list1.setModel(dl);
+    }
+
+    public void llenarJlist1(){
+        DefaultListModel dlm1 = new DefaultListModel<>();
+        for(Paqueteria p:paquetes.getServiEntrega()){
+            dlm1.addElement(p);
+        }
+        list3.setModel(dlm1);
+    }
+    public void llenarJlist2(){
+        DefaultListModel dlm1 = new DefaultListModel<>();
+        for(Paqueteria p:paquetes.getServiEntrega()){
+            dlm1.addElement(p);
+        }
+        list2.setModel(dlm1);
+    }
+    public void ordenarBurbuja() {
+        List<Paqueteria> listaPaquetes = paquetes.getServiEntrega();
+        Paqueteria temp;
+        llenarJlist2();
+        for (int i = 0; i < listaPaquetes.size() - 1; i++) {
+            for (int j = 0; j < listaPaquetes.size() - i - 1; j++) {
+                if (listaPaquetes.get(j).getTracking() > listaPaquetes.get(j + 1).getTracking()) {
+                    temp = listaPaquetes.get(j);
+                    listaPaquetes.set(j, listaPaquetes.get(j + 1));
+                    listaPaquetes.set(j + 1, temp);
+                }
+            }
+        }
+      
+    llenarJlist1();
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("VentanaPaqueteria");
