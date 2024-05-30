@@ -132,6 +132,7 @@ public class VentanaPaqueteria {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    llenarJlist2();
                     ordenarBurbuja();
                 }catch (Exception ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -143,6 +144,7 @@ public class VentanaPaqueteria {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    llenarJlist2();
                     ordenarInsercion();
                 }catch (Exception ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -240,8 +242,7 @@ public class VentanaPaqueteria {
             throw new Exception("No hay empleados registrados.");
         }else{
             Paqueteria temp;
-            llenarJlist2();
-            for (int i = 0; i < listaPaquetes.size() - 1; i++) {
+                for (int i = 0; i < listaPaquetes.size() - 1; i++) {
                 for (int j = 0; j < listaPaquetes.size() - i - 1; j++) {
                     if (listaPaquetes.get(j).getTracking() > listaPaquetes.get(j + 1).getTracking()) {
                         temp = listaPaquetes.get(j);
@@ -260,7 +261,6 @@ public class VentanaPaqueteria {
         if (listaPaquetes.isEmpty()) {
             throw new Exception("No hay paquetes registrados.");
         } else {
-            llenarJlist2();
             for (int i = 1; i < listaPaquetes.size(); i++) {
                 Paqueteria key = listaPaquetes.get(i);
                 int j = i - 1;
