@@ -84,7 +84,7 @@ public class VentanaPaqueteria {
                     spinner1.setValue(pa.getTracking());
                     textField2.setText(String.valueOf(pa.getPeso()));
                     comboBox1.setSelectedItem(pa.getCiudadEntrega());
-                    comboBox2.setSelectedItem(pa.getCedulaReceptor());
+                    comboBox2.setSelectedItem(pa.getCiudadRecepcion());
                     textField1.setText(pa.getCedulaReceptor());
 
                 }
@@ -132,8 +132,8 @@ public class VentanaPaqueteria {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    llenarJlist2();
-                    ordenarBurbuja();
+                    llenarJlistInicial();
+                    llenarJlistTracking();
                 }catch (Exception ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
@@ -144,8 +144,8 @@ public class VentanaPaqueteria {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    llenarJlist2();
-                    ordenarInsercion();
+                    llenarJlistInicial();
+                    llenarJlistPeso();
                 }catch (Exception ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
@@ -214,65 +214,42 @@ public class VentanaPaqueteria {
     }
 
     public void llenarJlist(){
-        DefaultListModel<Paqueteria> dl = new DefaultListModel<>();
+        DefaultListModel<Paqueteria> dlm = new DefaultListModel<>();
+        dlm.removeAllElements();
         for (Paqueteria p : paquetes.getServiEntrega()) {
-            dl.addElement(p);
+            dlm.addElement(p);
         }
-        list1.setModel(dl);
+        list1.setModel(dlm);
     }
 
-    public void llenarJlist1(){
-        DefaultListModel dlm1 = new DefaultListModel<>();
+    public void llenarJlistInicial(){
+        DefaultListModel dlm = new DefaultListModel<>();
+        dlm.removeAllElements();
         for(Paqueteria p:paquetes.getServiEntrega()){
+            dlm.addElement(p);
+        }
+        list2.setModel(dlm);
+    }
+
+    public void llenarJlistTracking() throws Exception {
+        DefaultListModel dlm1 = new DefaultListModel<>();
+        List<Paqueteria> listaT= paquetes.ordenarBurbuja();
+        for(Paqueteria p:listaT){
             dlm1.addElement(p);
         }
         list3.setModel(dlm1);
     }
-    public void llenarJlist2(){
-        DefaultListModel dlm1 = new DefaultListModel<>();
-        for(Paqueteria p:paquetes.getServiEntrega()){
-            dlm1.addElement(p);
+
+    public void llenarJlistPeso() throws Exception {
+        DefaultListModel dlm2 = new DefaultListModel<>();
+        List<Paqueteria> listaP= paquetes.ordenarInsercion();
+        for(Paqueteria p:listaP){
+            dlm2.addElement(p);
         }
-        list2.setModel(dlm1);
+        list3.setModel(dlm2);
     }
 
-    public void ordenarBurbuja() throws Exception {
-        List<Paqueteria> listaPaquetes = paquetes.getServiEntrega();
-        if (listaPaquetes.isEmpty()) {
-            throw new Exception("No hay empleados registrados.");
-        }else{
-            Paqueteria temp;
-                for (int i = 0; i < listaPaquetes.size() - 1; i++) {
-                for (int j = 0; j < listaPaquetes.size() - i - 1; j++) {
-                    if (listaPaquetes.get(j).getTracking() > listaPaquetes.get(j + 1).getTracking()) {
-                        temp = listaPaquetes.get(j);
-                        listaPaquetes.set(j, listaPaquetes.get(j + 1));
-                        listaPaquetes.set(j + 1, temp);
-                    }
-                }
-            }
-            llenarJlist1();
-        }
 
-    }
-
-    public void ordenarInsercion() throws Exception {
-        List<Paqueteria> listaPaquetes = paquetes.getServiEntrega();
-        if (listaPaquetes.isEmpty()) {
-            throw new Exception("No hay paquetes registrados.");
-        } else {
-            for (int i = 1; i < listaPaquetes.size(); i++) {
-                Paqueteria key = listaPaquetes.get(i);
-                int j = i - 1;
-                while (j >= 0 && listaPaquetes.get(j).getPeso() > key.getPeso()) {
-                    listaPaquetes.set(j + 1, listaPaquetes.get(j));
-                    j--;
-                }
-                listaPaquetes.set(j + 1, key);
-            }
-            llenarJlist1();
-        }
-    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("VentanaPaqueteria");

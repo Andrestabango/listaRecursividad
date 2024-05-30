@@ -111,6 +111,45 @@ public class Lista {
         return total;
     }
 
+    public List<Paqueteria> ordenarBurbuja() throws Exception {
+        List<Paqueteria> listaPaquetes = new ArrayList<>(serviEntrega);
+        if (listaPaquetes.isEmpty()) {
+            throw new Exception("No hay empleados registrados.");
+        }else{
+            Paqueteria temp;
+            for (int i = 0; i < listaPaquetes.size() - 1; i++) {
+                for (int j = 0; j < listaPaquetes.size() - i - 1; j++) {
+                    if (listaPaquetes.get(j).getTracking() > listaPaquetes.get(j + 1).getTracking()) {
+                        temp = listaPaquetes.get(j);
+                        listaPaquetes.set(j, listaPaquetes.get(j + 1));
+                        listaPaquetes.set(j + 1, temp);
+                    }
+                }
+            }
+        }
+        return  listaPaquetes;
+    }
+
+    public List<Paqueteria> ordenarInsercion() throws Exception {
+        List<Paqueteria> listaPaquetes = new ArrayList<>(serviEntrega);
+        if (listaPaquetes.isEmpty()) {
+            throw new Exception("No hay paquetes registrados.");
+        } else {
+            for (int i = 1; i < listaPaquetes.size(); i++) {
+                Paqueteria key = listaPaquetes.get(i);
+                int j = i - 1;
+                while (j >= 0 && listaPaquetes.get(j).getPeso() > key.getPeso()) {
+                    listaPaquetes.set(j + 1, listaPaquetes.get(j));
+                    j--;
+                }
+                listaPaquetes.set(j + 1, key);
+            }
+        }
+        return listaPaquetes;
+
+    }
+
+
 
 
 
