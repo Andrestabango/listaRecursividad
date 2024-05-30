@@ -30,6 +30,27 @@ public class Lista {
             mensaje += p +"\n";
         return mensaje;
     }
+    public void editarEmpleado(int tracking, double nuevoPeso, String nuevaCiudadEntrega, String nuevaCiudadRecepcion, String nuevaCedulaReceptor) {
+        Paqueteria paquete = buscarEmpleadoPorTracking(tracking);
+        if (paquete != null) {
+            paquete.setPeso(nuevoPeso);
+            paquete.setCiudadEntrega(nuevaCiudadEntrega);
+            paquete.setCiudadRecepcion(nuevaCiudadRecepcion);
+            paquete.setCedulaReceptor(nuevaCedulaReceptor);
+        } else {
+            throw new IllegalArgumentException("No se encontró ningún paquete con el tracking especificado: " + tracking);
+        }
+    }
+
+
+    public Paqueteria buscarEmpleadoPorTracking(int tracking) {
+        for (Paqueteria empleado : serviEntrega) {
+            if (empleado.getTracking() == tracking) {
+                return empleado;
+            }
+        }
+        return null; // Retorna null si no se encuentra ningún empleado con el tracking especificado
+    }
 
 
     public int sumarTotalPaquetes (){
@@ -74,6 +95,20 @@ public class Lista {
                 return totalPesoCiudad(indice+1,ciudad);
 
         }
+    }
+
+    int calcularTotalPaquetesEstado(String estado) {
+        return totalPaquetesEstado(estado, 0);
+    }
+
+    private int totalPaquetesEstado(String estado, int indice) {
+        int total = 0;
+        for (Paqueteria paquete : getServiEntrega()) { // Cambio aquí
+            if (paquete.getEstado().equals(estado)) {
+                total++;
+            }
+        }
+        return total;
     }
 
 
